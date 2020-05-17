@@ -40,8 +40,11 @@ for i = 1:size_working(1,1)
     end
 end
 % 从全部不等式constraints中，删除这些working set中有的不等式constraints
-A_temp(delete_position, :) = [];
-b_temp(delete_position, :) = [];
+if delete_position ~= zeros(size(working_b))'
+    A_temp(delete_position, :) = [];
+    b_temp(delete_position, :) = [];
+end
+
 
 
 % 经过这个for之后，A_temp, b_temp中的应该是，不在working set中且 ai' * p 小于零
@@ -67,7 +70,7 @@ for i = 1:size(b_temp)
     result_temp(i, 1) = (b_temp(i, 1) - A_temp(i, :) * theta)/(A_temp(i, :) * p);
 end
 
-result = 0;
+%result = 0;
 result = min(result_temp);
 aim = find(result == min(result_temp));
 ai = A_temp(aim, :);

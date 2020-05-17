@@ -40,7 +40,7 @@ constr_equation = constraints(A_equation, b_equation);
 constr_inequation = constraints(A_inequation, b_inequation);
 
 % 设置起始点
-theta_0 = [-2;4];
+theta_0 = [-1;3];
 
 % 确定acitve set中的constraints 
 % 只有确定了active set中的内容物才能知道以什么数据结构将矩阵们传入EQP中 12.05.2020
@@ -90,7 +90,7 @@ while 1
     
     
     [p, lambda] = EQP_Solution(G, working_coefficient, d, working_constant,theta);
-    if p == zeros(size(theta))
+    if p <= 1.0e-20
         
         if lambda >= zeros(size(lambda))
             break

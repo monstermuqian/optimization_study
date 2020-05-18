@@ -8,13 +8,21 @@
 % 
 % 开始运行算法前的准备工作
 % 
+clear;
+clc;
+
 
 % construction of test scenario
 % 生成的所谓原object function，它以function handle的形式直接接受一个列向量
 % 也就是 n X 1 的theta
 
-G = [ 4 -3 ; -3 4];
-d = [ 0 ; 0 ];
+% Scenario one
+%G = [ 4 -3 ; -3 4];
+%d = [ 0 ; 0 ];
+
+% Scenario two
+G = [2 0; 0 2];
+d = [-2 ; -5];
 
 % 把theta以列向量的形式怼进去就好J(theta)
 J = scenario_function(G, d);
@@ -31,16 +39,24 @@ J = scenario_function(G, d);
 % 这里储存的都是以下面形式呈现的constraints
 % A * theta = || >= b ;
 
-A_equation = [1 1];
-b_equation = 2;
-A_inequation = [-1 0];
-b_inequation = 1;
+% Scenario one
+%A_equation = [1 1];
+%b_equation = [1 1];
+%A_inequation = [-1 0];
+%b_inequation = 1;
 
-constr_equation = constraints(A_equation, b_equation);
-constr_inequation = constraints(A_inequation, b_inequation);
+% Scenario two
+A_equation = [];
+b_equation = [];
+A_inequation = [1 -2 ; -1 -2 ; -1 2 ; 1 0; 0 1];
+b_inequation = [-2 ; -6; -2; 0; 0];
+
+%将不等式的具体样子表达出来是不需要的
+%constr_equation = constraints(A_equation, b_equation);
+%constr_inequation = constraints(A_inequation, b_inequation);
 
 % 设置起始点
-theta_0 = [-1;3];
+theta_0 = [0;2];
 
 % 确定acitve set中的constraints 
 % 只有确定了active set中的内容物才能知道以什么数据结构将矩阵们传入EQP中 12.05.2020
@@ -90,7 +106,7 @@ while 1
     
     
     [p, lambda] = EQP_Solution(G, working_coefficient, d, working_constant,theta);
-    if p <= 1.0e-20
+    if p <= 1.0e-16 * ones(size(theta_0))
         
         if lambda >= zeros(size(lambda))
             break
@@ -98,13 +114,14 @@ while 1
             
             % 找到最负lambda的位置，按理来说，它在lambda向量中位置减去equation
             % 的 A 和 b 的行数，就可以得到这个lambda代表的inequation然后将其删除
-            % 在working_set{2,1}{4,1}中的位置，找到就将它删除
+            % 在working_set{3,1}，代表了A_inequation
+            % {4,1},代表了b_inequation 中的位置，找到就将它删除
             
             position_min_lambda = find(lambda == min(lambda));
             size_A_equation = size(working_set{1,1});
             size_b_equation = size(working_set{2,1});
-            working_set{2,1}(postion_min_lambda - size_A_equation(1,1)) = [];
-            working_set{4,1}(postion_min_lambda - size_b_equation(1,1)) = [];
+            working_set{3,1}(position_min_lambda - size_A_equation(1,1), :) = [];
+            working_set{4,1}(position_min_lambda - size_b_equation(1,1), :) = [];
         end
         
     else
@@ -130,9 +147,18 @@ while 1
 end
 
 
+
+disp('The constrainted minimum of J is')
+disp(theta)
 % 编写至此，其实代码都按照我所想的那样来行动了，只要设置断点去一步步走就知
 % 但是不知道为什么它一直碰不到不等式constraints的边界，明天再好好debug一下
 % 16.05.2020
+
+% bug已经被修补，其实就是在使用KKT矩阵的时候，要注意最后计算出来的结果给到
+% p上时要加负号，经过两个task的验证，代码已经能准确地计算出constrainted min
+% 之后的工作就是增加一些错误raise，完毕 18.05.2020
+
+
 
 
 

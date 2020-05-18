@@ -16,7 +16,7 @@ K = [G  A';A zeros(size_A(1, 1), size_A(1, 1))];
 
 result = pinv(K)* [ g ; h ];
 
-p = result(1:size_A(1,2), 1);
+p = -result(1:size_A(1,2), 1);
 lambda = result( size_A(1, 2) + 1 : end, 1);
 
 end

@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a9462882-bc55-470d-9457-af2ea3b547c8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../SQP/EQP_Solution.m" beforeDir="false" afterPath="$PROJECT_DIR$/../matlab/SQP/EQP_Solution.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SQP/SQP_Solution.m" beforeDir="false" afterPath="$PROJECT_DIR$/../matlab/SQP/SQP_Solution.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SQP/compare_blocking.m" beforeDir="false" afterPath="$PROJECT_DIR$/../matlab/SQP/compare_blocking.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SQP/compare_negative_lambda.m" beforeDir="false" afterPath="$PROJECT_DIR$/../matlab/SQP/compare_negative_lambda.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SQP/constraints.m" beforeDir="false" afterPath="$PROJECT_DIR$/../matlab/SQP/constraints.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../SQP/scenario_function.m" beforeDir="false" afterPath="$PROJECT_DIR$/../matlab/SQP/scenario_function.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EQP_Solution.py" beforeDir="false" afterPath="$PROJECT_DIR$/EQP_Solution.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SQP_solution.py" beforeDir="false" afterPath="$PROJECT_DIR$/SQP_solution.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,6 +27,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -83,6 +81,9 @@
       <option name="presentableId" value="Default" />
       <updated>1589796384322</updated>
       <workItem from="1589796385514" duration="1130000" />
+      <workItem from="1610572045488" duration="1725000" />
+      <workItem from="1610722574458" duration="917000" />
+      <workItem from="1611758701232" duration="11737000" />
     </task>
     <servers />
   </component>
@@ -94,13 +95,15 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/python$SQP_solution.coverage" NAME="SQP_solution Coverage Results" MODIFIED="1589797258977" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/python$SQP_solution.coverage" NAME="SQP_solution Coverage Results" MODIFIED="1611785897155" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

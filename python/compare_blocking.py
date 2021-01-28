@@ -72,7 +72,7 @@ def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_len
             alpha = min_calc
             b_blocked = b_result[min_index, 0]
             A_blocked = A_result[min_index, :]
-            # 应在此处获得更新constraints package的b_i与a_i'
+            # return the b_i and a_i' of blocking constraint
             return alpha, b_blocked, A_blocked
         else:
             alpha = 1

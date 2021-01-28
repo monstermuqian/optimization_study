@@ -9,7 +9,9 @@ import numpy as np
 
 def EQP_Solution (A, b, G, d, theta):
     g = np.dot(G, theta) + d
+    print("current g is :{}".format(g))
     h = np.dot(A, theta) - b
+    print("current h is :{}".format(h))
 
     # concatenate the matrix into a KKT-Matrix and [g;h] vector
     [row, col] = np.shape(A)
@@ -18,6 +20,7 @@ def EQP_Solution (A, b, G, d, theta):
     K_temp2 = np.concatenate((A, zeros_matrix), axis=1)
 
     K = np.concatenate((K_temp1, K_temp2), axis=0)
+    print("current K is : {}".format(K))
     g_h = np.concatenate((g, h), axis=0)
 
     # calculation the step length and lambda number

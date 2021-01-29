@@ -10,11 +10,31 @@
 # Basic functions are totally implemented. The rest work is improvement of the program
 # to adapt with equation constraints.
 
+# 29.01.2021
+# All works are finished. This program can solve a linear optimization problem subjected
+# to equations and inequations constraints. Maybe it could also be expanded to nonlinear
+# situation if taylor expansion is used. I will finish this functionality some days.
+
 
 import numpy as np
 from EQP_Solution import EQP_Solution as eqp
 from compare_blocking import calculation_alpha
 import os
+
+
+def if_working(A_inequation, b_inequation, theta):
+    [row, col] = np.shape(b_inequation)
+    A = np.zeros(shape=(0, 2), dtype=float)
+    b = np.zeros(shape=(0, 1), dtype=float)
+
+    # select all a_i' * theta = b_i then save in temporary variables A and b
+    for i in range(row):
+        temp = np.dot(A_inequation[i, :], theta)
+        if temp == b_inequation[i, :]:
+            A = np.vstack((A, A_inequation[i, :]))
+            b = np.vstack((b, b_inequation[i, :]))
+    return A, b
+
 
 
 def main():
@@ -23,11 +43,14 @@ def main():
                   [0.0,  2.0]])
     d = np.array([[-2.0],
                   [-5.0]])
-    theta = np.array([[0.0],
-                      [1.0]])
+    theta = np.array([[2.0],
+                      [0.0]])
 
     A_equation = np.zeros(shape= (0,2))
     b_equation = np.zeros(shape= (0,1))
+    [row_equation, col_equation] = np.shape(b_equation)
+
+
     A_inequation = np.array([[ 1.0, -2.0],
                              [-1.0, -2.0],
                              [-1.0,  2.0],
@@ -39,8 +62,8 @@ def main():
                              [ 0.0],
                              [ 0.0]])
 
-    A = np.vstack((A_inequation[0, :], A_inequation[3, :]))
-    b = np.vstack((b_inequation[0, :], b_inequation[3, :]))
+
+    [A, b] = if_working(A_inequation, b_inequation, theta)
 
     A_working = np.vstack((A_equation, A))
     b_working = np.vstack((b_equation, b))
@@ -56,17 +79,15 @@ def main():
             judge_lambda = np.array([lambda_star > 0])
             if judge_lambda.all():
                 break
-                #pass
             else:
                 lambda_min_index = np.argmin(lambda_star)
-                #print(lambda_min_index)
                 b_working = np.delete(b_working, lambda_min_index, axis=0)
                 A_working = np.delete(A_working, lambda_min_index, axis=0)
                 print("[INFO] delete the constraint represented by the most negative one ")
         else:
             [alpha, b_blocked, A_blocked] = calculation_alpha(A_inequation, A_working,
                                                               b_inequation, b_working,
-                                                              step_length, theta)
+                                                              step_length, theta, row_equation)
             # If alpha is unequal to one, it could just be illustrated as that some
             # constraint is blocking the heading direction. So use the returned b
             # and A to update the working set.
@@ -78,7 +99,7 @@ def main():
             # At the end of the loop, execute gradient descent
             theta = theta + alpha * step_length
 
-    print("The optimal parameter is :{}".format(theta))
+    print("[INFO] The optimal parameter is :theta_1 = {}, theta_2 = {}".format(theta[0, 0], theta[1, 0]))
 
 
 

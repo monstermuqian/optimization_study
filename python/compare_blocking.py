@@ -1,19 +1,22 @@
 '''
 28.01.2021 by Muqian Chen
-I would like to use this package to include two functions
+I would like to use this package to include one function that:
 
-1. calculation_alpha accepts the current parameter in the working set
+calculation_alpha accepts the current parameter in the working set
 to calculate alpha parameter used to multiply with step length for
-reaching a gradient descent.
-
-
+reaching a gradient descent. And simultaneously manage the working
+set when calculating the value smaller than one.
 '''
 
 
 
 import numpy as np
 
-def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_length, theta):
+def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_length, theta, row_equation):
+    # split the parts of inequation constraints from current working set
+    b_working = b_working[row_equation:, :]
+    A_working = A_working[row_equation:, :]
+
     # firstly thinking about situation with only unequaled constraints
     [row, col] = np.shape(b_working)
     exist_index = np.zeros(0, dtype=float)
@@ -42,13 +45,11 @@ def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_len
     b_result = np.zeros((0, 1), dtype=float)
     A_result = np.zeros((0, 2), dtype=float)
 
-    index_list = []
     # please be careful, I would like to make b_result as a column vector
     for i in range(len(b_inequation)):
         if np.dot(A_inequation[i, :], step_length) < 0:
             b_result = np.vstack((b_result, b_inequation[i, :]))
             A_result = np.vstack((A_result, A_inequation[i, :]))
-            index_list.append(i)
 
     # if there are not any satisfied constraints parameter inside b_result
     # It could just be said that the alpha parameter is one.
@@ -56,7 +57,7 @@ def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_len
     # calc_result and then get the minimal value
     calc_result = []
     length = len(b_result)
-    print(np.shape(b_result))
+    print("[INFO] There are {} satisfying compare conditions a_i' * p < 0 ".format(length))
     if length == 0:
         alpha = 1
         b_blocked = np.zeros((0, 1), dtype=float)
@@ -69,6 +70,7 @@ def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_len
         min_calc = min(calc_result)
         min_index = calc_result.index(min_calc)
         if min_calc < 1:
+            print("[INFO] Oops! Touch the boundary of constraint area !")
             alpha = min_calc
             b_blocked = b_result[min_index, 0]
             A_blocked = A_result[min_index, :]

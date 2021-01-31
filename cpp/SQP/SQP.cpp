@@ -1,14 +1,14 @@
 ﻿/*
-*		 Topic: Implementation of Sequential Quadratic Programming in C++
-*	   Library: Eigen, a c++ matrix operation library.
-*		Author: Muqian, Chen
-* Current Date: 31.01.2021
-*		   Log: The function to calculate a quadratic optimal programming constrainted by inequation 
-*               conditions are totally implemnted. It did take a long time because I am not familiar 
-*				with lots of implicit mechamism of c++. But I feel so lucky that I really started to
-*				program with it. I think that I am moving towards to the aim that I really implement
-*				something based on ROS. The next task is to cover the case of equation constraints
-*				and add a function which automatically calculates the initial working set. Over.
+*Topic: Implementation of Sequential Quadratic Programming in C++
+*Library: Eigen, a c++ matrix operation library.
+*Author: Muqian, Chen
+*Current Date: 31.01.2021
+*Log: The function to calculate a quadratic optimal programming constrainted by inequation 
+*        conditions are totally implemnted. It did take a long time because I am not familiar 
+*        with lots of implicit mechamism of c++. But I feel so lucky that I really started to
+*        program with it. I think that I am moving towards to the aim that I really implement
+*        something based on ROS. The next task is to cover the case of equation constraints
+*        and add a function which automatically calculates the initial working set. Over.
 */
 
 #include <iostream>

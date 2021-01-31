@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a9462882-bc55-470d-9457-af2ea3b547c8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EQP_Solution.py" beforeDir="false" afterPath="$PROJECT_DIR$/EQP_Solution.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SQP_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/SQP_main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/compare_blocking.py" beforeDir="false" afterPath="$PROJECT_DIR$/compare_blocking.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -157,6 +155,8 @@
       <workItem from="1611758701232" duration="11737000" />
       <workItem from="1611821070601" duration="30144000" />
       <workItem from="1611903739134" duration="4831000" />
+      <workItem from="1611959893130" duration="9000" />
+      <workItem from="1612087648765" duration="3962000" />
     </task>
     <servers />
   </component>
@@ -180,6 +180,6 @@
     <SUITE FILE_PATH="coverage/python$SQP_solution.coverage" NAME="SQP_solution Coverage Results" MODIFIED="1611865782845" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/python$compare_blocking.coverage" NAME="compare_blocking Coverage Results" MODIFIED="1611849581747" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/python$EQP_Solution.coverage" NAME="EQP_Solution Coverage Results" MODIFIED="1611908675351" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/python$SQP_main.coverage" NAME="SQP_main Coverage Results" MODIFIED="1611908779878" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/python$SQP_main.coverage" NAME="SQP_main Coverage Results" MODIFIED="1612107431995" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

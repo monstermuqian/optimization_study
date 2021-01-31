@@ -12,7 +12,8 @@ set when calculating the value smaller than one.
 
 import numpy as np
 
-def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_length, theta, row_equation):
+def calculation_alpha(A_inequation, A_working, b_inequation,
+                      b_working, step_length, theta, row_equation):
     # split the parts of inequation constraints from current working set
     b_working = b_working[row_equation:, :]
     A_working = A_working[row_equation:, :]
@@ -36,8 +37,9 @@ def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_len
                 exist_index = np.hstack((exist_index, b_index[i]))
         # save the right index in np.array exist_index
 
-    # delete all in the working set existed constraints from all unequaled constraints
-    # so that the rest parameters are all not in working set.
+    # delete all in the working set existed constraints from
+    # all unequaled constraints so that the rest parameters
+    # are all not in working set.
     A_inequation = np.delete(A_inequation, exist_index, axis=0)
     b_inequation = np.delete(b_inequation, exist_index, axis=0)
 
@@ -57,7 +59,8 @@ def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_len
     # calc_result and then get the minimal value
     calc_result = []
     length = len(b_result)
-    print("[INFO] There are {} satisfying compare conditions a_i' * p < 0 ".format(length))
+    print("[INFO] There are {} satisfying compare conditions a_i' * p < 0 "
+          .format(length))
     if length == 0:
         alpha = 1
         b_blocked = np.zeros((0, 1), dtype=float)
@@ -65,7 +68,8 @@ def calculation_alpha(A_inequation, A_working, b_inequation, b_working, step_len
         return alpha, b_blocked, A_blocked
     else:
         for i in range(len(b_result)):
-            temp = (b_result[i, 0] - np.dot(A_result[i, :], theta)) / np.dot(A_result[i, :], step_length)
+            temp = (b_result[i, 0] - np.dot(A_result[i, :], theta)) / \
+                   np.dot(A_result[i, :], step_length)
             calc_result.append(temp)
         min_calc = min(calc_result)
         min_index = calc_result.index(min_calc)

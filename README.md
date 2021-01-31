@@ -16,3 +16,13 @@ All works are done and the program is now able to solve a linear optimization pr
 inequation constraints. Some days I may improve the program with taylor expansion for dealing with nonlinear problem. 
 
 ----29.01.2021
+
+# Sequential Quadratic Programming with C++ and Eigen Library
+
+After another hard working of 3 days I have implemented SQP algorithm with C++ and Eigen library. The aim of this work
+is to learn about how to operate matrix with C++ language and to consolidate the my knowledge about numerical optimizaiton.
+And then I would like to use this library on ROS to implement some Tracking Algorithms or Sensor Fusion algorithms. But 
+there are still some tiny works to be finished such that I have to cover the case of eqution constraints and add some 
+error raises. 
+
+-----31.01.2021

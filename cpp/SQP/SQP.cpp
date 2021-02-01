@@ -51,6 +51,9 @@ VectorXd eqpCalculation(MatrixXd A, VectorXd b, MatrixXd G,
 	//then catenate [g;h] 
 	VectorXd g_h(g_row + h_row, 1);
 	g_h << g, h;
+	//for debug
+	//cout << "[INFO]Current KKT Matrix is:" << endl << K << endl;
+	//cout << "[INFO]Current g_h is:" << endl << g_h << endl;
 
 	//calculate KKT-Equation 
 	VectorXd result(G_row + A_row, 1);
@@ -62,6 +65,9 @@ VectorXd eqpCalculation(MatrixXd A, VectorXd b, MatrixXd G,
 //implementation of a function template for removing a specific row from MatrixXf or VectorXf
 //After validation, this function could work at situation MatrixXf or VectorXf
 template <typename T1, typename T2> void removeRow(T1& a, T2 b) {
+	// a: Matrix or Vector which need to remove the row
+	// b: the row number of the removed row.
+
 	const int newRow = a.rows() - 1;
 	const int newCol = a.cols();
 
@@ -78,13 +84,39 @@ template <typename T1, typename T2> void removeRow(T1& a, T2 b) {
 //Implementation of a function template for adding a trivial but dimension-matched row into
 //MatrixXf or VectorXf
 template <typename T1, typename T2> void addRow(T1& a, T2 b) {
+	// a: the target Matrix or Vector 
+	// b: added row into target
+	// column number should be unchanged.
+
 	int newRow = a.rows() + 1;
-	int newCol = a.cols();
+	int newCol = b.cols();
 
 	a.conservativeResize(newRow, newCol);
-
 	a.block(newRow - 1, 0, 1, newCol) = b;
 };
+
+
+//Implementation of a fucntion template 
+void setInitial(MatrixXd A, MatrixXd& A_working,  MatrixXd& A_deactive, VectorXd b, VectorXd& b_working, 
+			    VectorXd& b_deactive, VectorXd  initialTheta, int f) {
+	//f: amount of inequations
+	VectorXd result(f ,1);
+	result = A * initialTheta - b;
+	ArrayXd resultArray;
+	resultArray = result.array();
+	for (int i = 0; i < f; i++) {
+		if ( result(i, 0) < 1e-7) {
+			//add the matched constraints into working set
+			addRow(A_working, A.row(i));
+			addRow(b_working, b.row(i));
+		}
+		else {
+			//add the unmatched constraints into deacitve set
+			addRow(A_deactive, A.row(i));
+			addRow(b_deactive, b.row(i));
+		}
+	}
+}
 
 
 //Pass by reference could be used here for updating the working set.
@@ -159,54 +191,62 @@ double calculationAlpha(MatrixXd& A_working, VectorXd& b_working,
 
 int main(int argc, char** argv)
 {
-	//define G and d and inequation constraints
-	//typedef Matrix<float, 2, 2> Matrix2f;
+	//define G and d of objective function
 	MatrixXd G(2,2);
 	G << 2.0, 0.0, 
 		 0.0, 2.0;
-	//typedef Matrix<float, 2, 1> Vector2f;
 	VectorXd d(2,1);
 	d << -2.0, 
 		 -5.0;
 
-	//typedef Matrix<float, Dynamic, 2> MatrixX2f;
-	MatrixXd A(5, 2);
-	A << 1.0, -2.0, 
-		-1.0, -2.0, 
-		-1.0,  2.0, 
-		 1.0,  0.0,
-		 0.0,  1.0;
-	//Map <Matrix<float, 2,5, RowMajor>> M1(A.data());
-
-	//typedef Matrix<float, Eigen::Dynamic, 1> VectorXf;
-	VectorXd b(5, 1);
-	b << -2.0, 
-		 -6.0, 
-		 -2.0, 
-		  0.0, 
-		  0.0;
-
 	//define initialized theta
-	VectorXd theta(2,1);
-	theta(0) = 0.0;
-	theta(1) = 1.0;
+	VectorXd theta(2, 1);
+	theta(0) = 2.0;
+	theta(1) = 0.0;
+	int ParameterNum = theta.rows();
+
+	//define equation constraints
+	MatrixXd AEquation(0, ParameterNum);
+	VectorXd bEquation(0, 1);
+
+
+	//define inequation constraints
+	MatrixXd AInequation(5, ParameterNum);
+	AInequation << 1.0, -2.0, 
+				  -1.0, -2.0, 
+				  -1.0,  2.0, 
+				   1.0,  0.0,
+				   0.0,  1.0;
+
+	int AInitialRowNum = AInequation.rows();
+
+	VectorXd bInequation(5, 1);
+	bInequation << -2.0, 
+				   -6.0, 
+				   -2.0, 
+				    0.0, 
+				    0.0;
+
 
 
 
 	//define working set
-	MatrixXd A_working(2, 2);
-	VectorXd b_working(2, 1);
+	MatrixXd A_working(0, ParameterNum);
+	VectorXd b_working(0, 1);
 
-	A_working << A.row(0), A.row(3);
-	b_working << b.row(0), b.row(3);
+	A_working = AEquation;
+	b_working = bEquation;
 
 
-	MatrixXd A_deactive(3, 2);
-	VectorXd b_deactive(3, 1);
+	MatrixXd A_deactive(0, ParameterNum);
+	VectorXd b_deactive(0, 1);
 
-	A_deactive << A.row(1), A.row(2), A.row(4);
-	b_deactive << b.row(1), b.row(2), b.row(4);
+	setInitial(AInequation, A_working, A_deactive, bInequation, 
+			   b_working, b_deactive, theta, AInitialRowNum);
 
+	//for debug
+	//cout << "[INFO]Current A inequation constraints is:" << endl << A_working << endl;
+	//cout << "[INFO]Current b inequation constraints is:" << endl << b_working << endl;
 	//define the main variable during the calculating loop
 	Index constraintsNumber = b_working.rows();
 	Index thetaNumber = theta.rows();
@@ -215,7 +255,7 @@ int main(int argc, char** argv)
 	VectorXd stepLength(thetaNumber, 1);
 	VectorXd lambdaStar(constraintsNumber, 1);
 
-	
+	int i = 1;
 
 	while (true) {
 		
@@ -225,7 +265,8 @@ int main(int argc, char** argv)
 		constraintsNumber = b_working.rows();
 		stepLength << -result.head(thetaNumber);
 		lambdaStar = result.tail(constraintsNumber);
-		cout << "[INFO]: current lambdaStar is:"<< lambdaStar << endl;
+		//for debug
+		//cout << "[INFO]: current lambdaStar is:"<<endl<< lambdaStar << endl;
 
 		if ( ( stepLength.array() < 1e-10 ).all() == 1 ) {
 			if ((lambdaStar.array() > 0).all() == 1) {
@@ -242,14 +283,16 @@ int main(int argc, char** argv)
 				//delete the constraints from working set
 				removeRow(A_working, minRow);
 				removeRow(b_working, minRow);
-				cout << "[INFO: A constraint is deleted from working set and added in deactive set.]" << endl;
+				cout << "[INFO] " << i << ". loop. A constraint is deleted from working set and added in deactive set." << endl;
+				i++;
 			}
 		}
 		else {
 			float alpha = 0.0;
 			alpha = calculationAlpha(A_working, b_working, A_deactive, b_deactive, stepLength, theta);
 			theta = theta + alpha * stepLength;
-			cout << "[INFO]Current Theta is :" <<endl << theta << endl;
+			cout << "[INFO]" << i << ". loop.Current Theta is :" <<endl << theta << endl;
+			i++;
 		}
 	}
 	

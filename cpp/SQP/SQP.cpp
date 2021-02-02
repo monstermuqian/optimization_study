@@ -103,7 +103,7 @@ void setInitial(MatrixXd A, MatrixXd& A_working,  MatrixXd& A_deactive, VectorXd
 	VectorXd result(f ,1);
 	result = A * initialTheta - b;
 	ArrayXd resultArray;
-	resultArray = result.array();
+	resultArray = result.array().abs();
 	for (int i = 0; i < f; i++) {
 		if ( result(i, 0) < 1e-7) {
 			//add the matched constraints into working set

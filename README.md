@@ -26,3 +26,10 @@ there are still some tiny works to be finished such that I have to cover the cas
 error raises. 
 
 -----31.01.2021
+
+Finally today I have finished all work about programming a C++ program to run a sequential quadratic programming algorithm.
+And also I have reached my aim to learning Eigen Library for next tasks on Robot Operating System(ROS). I really appreciate
+that I have made a hard working so that I could experience the beauty of this library and C++ and get more confidence to face
+the works in my future career. 
+
+------01.02.2021

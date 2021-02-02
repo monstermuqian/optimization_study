@@ -2,18 +2,13 @@
 *Topic: Implementation of Sequential Quadratic Programming in C++
 *Library: Eigen, a c++ matrix operation library.
 *Author: Muqian, Chen
-*Date: 31.01.2021
+*Current Date: 31.01.2021
 *Log: The function to calculate a quadratic optimal programming constrainted by inequation 
 *        conditions are totally implemnted. It did take a long time because I am not familiar 
 *        with lots of implicit mechamism of c++. But I feel so lucky that I really started to
 *        program with it. I think that I am moving towards to the aim that I really implement
 *        something based on ROS. The next task is to cover the case of equation constraints
 *        and add a function which automatically calculates the initial working set. Over.
-*Date: 01.02.2021
-*Log: The SQP algorihm with C++ is totally finished and it can now cover the case including
-*        equation constraints. If I want to use it just change the number of G, d, theta, AEuqaion
-*        bEquation, AInequation and bInequation so that I could get the optimal solution of an
-*        constrainted linear quadratic optimization problem. 
 */
 
 #include <iostream>
@@ -126,7 +121,7 @@ void setInitial(MatrixXd A, MatrixXd& A_working,  MatrixXd& A_deactive, VectorXd
 
 //Pass by reference could be used here for updating the working set.
 double calculationAlpha(MatrixXd& A_working, VectorXd& b_working, 
-					   MatrixXd& A_deactive, VectorXd& b_deactive, VectorXd stepLength, VectorXd theta) {
+					   MatrixXd& A_deactive, VectorXd& b_deactive, VectorXd stepLength, VectorXd theta, int i) {
 	double alpha = -1;
 	int deactRow = A_deactive.rows();
 	int deactCol = A_deactive.cols();
@@ -142,15 +137,22 @@ double calculationAlpha(MatrixXd& A_working, VectorXd& b_working,
 	ArrayXd resultDown(deactRow, 1);
 	resultUp = resultAiTheta.array();
 	resultDown = resultAiP.array();
+	//for debug
+	//cout << "[INFO]: current resultUp is:" << endl << resultUp << endl;
+	//cout << "[INFO]: current resultDown is:" << endl << resultDown << endl;
+	
 
 	for (int i = 0; i < deactRow; i++) {
-		if (resultAiP(i, 0) < 1e-10) {
+		if (resultDown(i,0)< 0) {
 			result(i, 0) = resultUp(i, 0) / resultDown(i, 0);
 		}
 		else {
 			result(i, 0) = 1000.0;
 		}
 	}
+	//for debug
+	//cout << "[INFO]: current result is:" << endl << result << endl;
+
 
 	Index minRow, minCol;
 	double min = 0;
@@ -180,6 +182,7 @@ double calculationAlpha(MatrixXd& A_working, VectorXd& b_working,
 		//add the blocking constraint into working set
 		addRow(A_working, A_deactive.row(minRow));
 		addRow(b_working, b_deactive.row(minRow));
+		cout << "[INFO] " << i << ". loop. A constraint is added to working set and deleted from deactive set." << endl;
 
 		//delete the blocking constraint from deactive set
 		removeRow(A_deactive, minRow);
@@ -271,9 +274,10 @@ int main(int argc, char** argv)
 		stepLength << -result.head(thetaNumber);
 		lambdaStar = result.tail(constraintsNumber);
 		//for debug
-		//cout << "[INFO]: current lambdaStar is:"<<endl<< lambdaStar << endl;
+		cout << "[INFO]: current stepLength is:" << endl << stepLength << endl;
+		cout << "[INFO]: current lambdaStar is:" << endl << lambdaStar << endl;
 
-		if ( ( stepLength.array() < 1e-10 ).all() == 1 ) {
+		if ( ( stepLength.array().abs() < 1e-10 ).all() == 1 ) {
 			if ((lambdaStar.array() > 0).all() == 1) {
 				break;
 			}
@@ -294,7 +298,8 @@ int main(int argc, char** argv)
 		}
 		else {
 			float alpha = 0.0;
-			alpha = calculationAlpha(A_working, b_working, A_deactive, b_deactive, stepLength, theta);
+			alpha = calculationAlpha(A_working, b_working, A_deactive, b_deactive, stepLength, theta, i);
+			cout << "[INFO]" << i << ". loop.Current alpha is :" << endl << alpha << endl;
 			theta = theta + alpha * stepLength;
 			cout << "[INFO]" << i << ". loop.Current Theta is :" <<endl << theta << endl;
 			i++;
